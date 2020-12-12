@@ -229,7 +229,8 @@ BEGIN_WINDOW_MAP(WindowsDlgMap)
 		BEGINCOLS(WRCT_REST,0,0)                       // Begin list control column
 			BEGINROWS(WRCT_REST,0,0)
 				RCREST(IDC_WINDOWS_LIST)
-				RCSPACE(20)
+				RCSPACE(4)
+				RCSPACE(16)
 			ENDGROUP()
 			RCSPACE(12)
 			BEGINROWS(WRCT_TOFIT,0,0)
@@ -580,8 +581,6 @@ BOOL WindowsDlg::onInitDialog()
 		goToCenter();
 	}
 
-	_statusBar.init(GetModuleHandle(NULL), _hSelf, 1);
-	_statusBar.display();
 	doRefresh(true);
 	return TRUE;
 }
@@ -669,7 +668,6 @@ void WindowsDlg::updateColumnNames()
 void WindowsDlg::onSize(UINT nType, int cx, int cy)
 {
 	MyBaseClass::onSize(nType, cx, cy);					
-	SendMessage(_statusBar.getHSelf(),WM_SIZE, 0, 0);
 	fitColumnsToSize();
 }
 
@@ -883,10 +881,10 @@ void WindowsDlg::doCount()
 	TCHAR count[32];
 	wsprintf(count, TEXT("%d"), _idxMap.size());
 	
-	generic_string msg = TEXT("");
-	msg += pNativeSpeaker->getAttrNameStr(TEXT("Total: "), WD_ROOTNODE, WD_TABTOTAL);
+	generic_string msg = TEXT("Windows -- ");
+	msg += pNativeSpeaker->getAttrNameStr(TEXT("Total tabs opened: "), WD_ROOTNODE, WD_TABTOTAL);
 	msg += count;
-	_statusBar.setText(msg.c_str(),0);
+	SetWindowText(_hSelf,msg.c_str());
 }
 
 void WindowsDlg::doSortToTabs()
